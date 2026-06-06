@@ -1,27 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 800 200" width="800" height="200">
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 860 230" width="860" height="230">
   <style>
-    text {
-      font-family: monospace;
-      font-size: 14px;
-      fill: #58a6ff;
-    }
-    .grass { fill: #3fb950; }
-    .house { fill: #d29922; }
-    .ground { fill: #8b949e; }
+    text { font-family: monospace; font-size: 15px; }
+
+    .ground { fill: #6e7681; }
+    .grass  { fill: #56d364; }
+    .house  { fill: #e3b341; }
+    .dog    { fill: #c9d1d9; }
+    .nose   { fill: #ff7b72; }
 
     /*
-      12-second cycle:
-        0%-30%  walk right  (0 -> 420px)
-        30%-45% sniff right (hold at 420px)
-        45%-75% walk left   (420px -> 0)
-        75%-90% sniff left  (hold at 0)
-        90%-100% hold, then loop
+      16-second cycle:
+        0%-30%   walk right (translateX 0 -> 430px)
+        30%-45%  sniff right (static at x=430 area)
+        45%-75%  walk left  (translateX 430 -> 0)
+        75%-90%  sniff left  (static at x=0 area)
+        90%-100% pause
     */
     @keyframes walk-right {
       0%    { transform: translateX(0px);   opacity: 1; }
-      30%   { transform: translateX(420px); opacity: 1; }
-      30.1% { opacity: 0; }
-      100%  { transform: translateX(420px); opacity: 0; }
+      30%   { transform: translateX(430px); opacity: 1; }
+      30.1% { transform: translateX(430px); opacity: 0; }
+      100%  { transform: translateX(430px); opacity: 0; }
     }
     @keyframes sniff-right {
       0%    { opacity: 0; }
@@ -32,11 +31,11 @@
       100%  { opacity: 0; }
     }
     @keyframes walk-left {
-      0%    { transform: translateX(420px); opacity: 0; }
-      44.9% { opacity: 0; }
-      45%   { transform: translateX(420px); opacity: 1; }
+      0%    { transform: translateX(430px); opacity: 0; }
+      44.9% { transform: translateX(430px); opacity: 0; }
+      45%   { transform: translateX(430px); opacity: 1; }
       75%   { transform: translateX(0px);   opacity: 1; }
-      75.1% { opacity: 0; }
+      75.1% { transform: translateX(0px);   opacity: 0; }
       100%  { transform: translateX(0px);   opacity: 0; }
     }
     @keyframes sniff-left {
@@ -47,95 +46,184 @@
       90%   { opacity: 0; }
       100%  { opacity: 0; }
     }
-    @keyframes legs {
+    @keyframes step {
       0%   { opacity: 1; }
       50%  { opacity: 0; }
       100% { opacity: 1; }
     }
+    @keyframes step-alt {
+      0%   { opacity: 0; }
+      50%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    @keyframes wag-a {
+      0%   { opacity: 1; }
+      50%  { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes wag-b {
+      0%   { opacity: 0; }
+      50%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
 
-    .dog-walk-right  { animation: walk-right  12s linear infinite; }
-    .dog-sniff-right { animation: sniff-right 12s linear infinite; }
-    .dog-walk-left   { animation: walk-left   12s linear infinite; }
-    .dog-sniff-left  { animation: sniff-left  12s linear infinite; }
-    .legs-a { animation: legs 0.4s steps(1) infinite; }
-    .legs-b { animation: legs 0.4s steps(1) infinite reverse; }
+    .wr   { animation: walk-right  16s linear infinite; }
+    .sr   { animation: sniff-right 16s linear infinite; }
+    .wl   { animation: walk-left   16s linear infinite; }
+    .sl   { animation: sniff-left  16s linear infinite; }
+    .pa   { animation: step     0.35s steps(1) infinite; }
+    .pb   { animation: step-alt 0.35s steps(1) infinite; }
+    .ta   { animation: wag-a 0.3s steps(1) infinite; }
+    .tb   { animation: wag-b 0.3s steps(1) infinite; }
   </style>
 
-  <!-- Ground -->
-  <text x="0" y="178" class="ground">________________________________________________________________________________</text>
+  <!-- Background -->
+  <rect width="860" height="230" fill="#0d1117"/>
+
+  <!-- Ground line -->
+  <text x="0" y="208" class="ground">_______________________________________________________________________________________</text>
 
   <!-- Grass tufts -->
-  <text x="25"  y="168" class="grass">,',</text>
-  <text x="120" y="168" class="grass">,',,</text>
-  <text x="220" y="168" class="grass">,,',</text>
-  <text x="330" y="168" class="grass">','</text>
-  <text x="460" y="168" class="grass">,,','</text>
-  <text x="580" y="168" class="grass">',',,</text>
-  <text x="700" y="168" class="grass">,,',</text>
-  <text x="770" y="168" class="grass">',</text>
+  <text x="10"  y="198" class="grass">|'|'|</text>
+  <text x="100" y="198" class="grass">|'|</text>
+  <text x="195" y="198" class="grass">|'|'|</text>
+  <text x="295" y="198" class="grass">|'|</text>
+  <text x="400" y="198" class="grass">|'|'|</text>
+  <text x="500" y="198" class="grass">|'|</text>
+  <text x="590" y="198" class="grass">|'|'|</text>
+  <text x="775" y="198" class="grass">|'|'|</text>
+  <text x="840" y="198" class="grass">|'|</text>
 
-  <!-- Doghouse -->
-  <text x="625" y="112" class="house">  /\  </text>
-  <text x="625" y="128" class="house"> /  \ </text>
-  <text x="625" y="144" class="house">|    |</text>
-  <text x="625" y="160" class="house">| [] |</text>
-  <text x="625" y="176" class="house">|____|</text>
+  <!-- Doghouse (x=652, rows at y=130,146,162,178,194,210) -->
+  <text x="652" y="130" class="house">    /\    </text>
+  <text x="652" y="146" class="house">   /  \   </text>
+  <text x="652" y="162" class="house">  /----\  </text>
+  <text x="652" y="178" class="house"> | (  ) | </text>
+  <text x="652" y="194" class="house"> |      | </text>
+  <text x="652" y="210" class="house"> |______| </text>
 
   <!--
-    Dog art (~80px wide at 14px monospace):
-    Facing right:
-      ___ ___
-     (oo)|   |
-      \/.|   |
-       /\  /\
-    Facing left:
-      ___ ___
-     |   |(oo)
-     |   |.\/
-      /\  /\
+    DOG DESIGN (7-bit ASCII only):
+
+    Facing right (body ~12 chars wide):
+
+       _
+      / )        <- floppy ear, head curve
+     ( o--.__    <- eye, snout going right, body starts
+      \_/   |~~  <- head bottom, body middle, tail up
+        \___/    <- body bottom / haunches
+        |   |    <- leg connector
+       (legs)
+
+    Leg pose A (striding):
+       / \ / \
+      /   X   \
+
+    Leg pose B (striding other way):
+       | | | |
+      /   |   \
+
+    Actually keep it simple - two leg rows:
+    Pose A:  " /\ /\"  then " /  \/  \"   <- spread
+    Pose B:  " |\ /|"  then " /       \"  <- crossing
+
+    Tail:  row 3 ends in "~~" (up) or "~\" (down) alternating
+
+    Facing left: mirror image
+
+    Sniff right: head dipped, nose near ground:
+       _
+      / )
+     ( o--.
+      \_/  '---.
+        \___   |
+         \  '--'  <- snout on ground
+          sniff~
+
+    Sniff left: mirror
   -->
 
-  <!-- Walking right -->
-  <g class="dog-walk-right">
-    <text x="10" y="122">___  ___</text>
-    <text x="10" y="138">(oo)|   |</text>
-    <text x="10" y="154"> \/ |   |</text>
-    <g class="legs-a">
-      <text x="10" y="170"> /\   /\</text>
+  <!-- ======================================================= -->
+  <!-- WALKING RIGHT: group drawn at x=10, translateX 0->430   -->
+  <!-- ======================================================= -->
+  <g class="wr dog">
+    <!-- Static body/head rows -->
+    <text x="10" y="130">   _        </text>
+    <text x="10" y="146">  / )       </text>
+    <text x="10" y="162"> ( o--.___  </text>
+    <text x="10" y="178">  \_/  ___}</text>
+    <!-- Tail wag A (up) -->
+    <g class="ta">
+      <text x="10" y="162">          ~</text>
     </g>
-    <g class="legs-b">
-      <text x="10" y="170">  /\  /\ </text>
+    <!-- Tail wag B (down) -->
+    <g class="tb">
+      <text x="10" y="178">          \</text>
     </g>
-  </g>
-
-  <!-- Sniffing right (held at x=420) -->
-  <g class="dog-sniff-right">
-    <text x="420" y="122">  ___   </text>
-    <text x="420" y="138"> (oo)  </text>
-    <text x="420" y="154">  \/___..</text>
-    <text x="420" y="170">  || ||  </text>
-    <text x="505" y="154" class="ground">sniff</text>
-  </g>
-
-  <!-- Walking left -->
-  <g class="dog-walk-left">
-    <text x="10" y="122">___  ___ </text>
-    <text x="10" y="138">|   |(oo)</text>
-    <text x="10" y="154">|   | \/ </text>
-    <g class="legs-a">
-      <text x="10" y="170"> /\   /\</text>
+    <!-- Leg pose A -->
+    <g class="pa">
+      <text x="10" y="194">   /\ /\   </text>
+      <text x="10" y="208">  /  V  \  </text>
     </g>
-    <g class="legs-b">
-      <text x="10" y="170">  /\  /\ </text>
+    <!-- Leg pose B -->
+    <g class="pb">
+      <text x="10" y="194">   || ||   </text>
+      <text x="10" y="208">  /   |  \ </text>
     </g>
   </g>
 
-  <!-- Sniffing left (held at x=0) -->
-  <g class="dog-sniff-left">
-    <text x="10" y="122">  ___   </text>
-    <text x="10" y="138"> (oo)   </text>
-    <text x="10" y="154">..___\/  </text>
-    <text x="10" y="170"> || ||   </text>
-    <text x="95" y="154" class="ground">sniff</text>
+  <!-- ======================================================= -->
+  <!-- SNIFF RIGHT: static at x=430+10=440                     -->
+  <!-- ======================================================= -->
+  <g class="sr dog">
+    <text x="440" y="130">   _        </text>
+    <text x="440" y="146">  / )       </text>
+    <text x="440" y="162"> ( o--.___  </text>
+    <text x="440" y="178">  \_/      }</text>
+    <text x="440" y="194">   |\___   </text>
+    <text x="440" y="208">   |    '--.</text>
+    <text x="490" y="208" class="nose">sniff~</text>
+  </g>
+
+  <!-- ======================================================= -->
+  <!-- WALKING LEFT: group drawn at x=10, translateX 430->0    -->
+  <!-- ======================================================= -->
+  <g class="wl dog">
+    <!-- Static body/head rows (mirror of right) -->
+    <text x="10" y="130">        _   </text>
+    <text x="10" y="146">       ( \  </text>
+    <text x="10" y="162">  ___.--o ) </text>
+    <text x="10" y="178">{___  \_/  </text>
+    <!-- Tail wag A (up) -->
+    <g class="ta">
+      <text x="10" y="162">~          </text>
+    </g>
+    <!-- Tail wag B (down) -->
+    <g class="tb">
+      <text x="10" y="178">/          </text>
+    </g>
+    <!-- Leg pose A -->
+    <g class="pa">
+      <text x="10" y="194">   /\ /\   </text>
+      <text x="10" y="208">  /  V  \  </text>
+    </g>
+    <!-- Leg pose B -->
+    <g class="pb">
+      <text x="10" y="194">   || ||   </text>
+      <text x="10" y="208">  /   |  \ </text>
+    </g>
+  </g>
+
+  <!-- ======================================================= -->
+  <!-- SNIFF LEFT: static at x=10                              -->
+  <!-- ======================================================= -->
+  <g class="sl dog">
+    <text x="10" y="130">        _   </text>
+    <text x="10" y="146">       ( \  </text>
+    <text x="10" y="162">  ___.--o ) </text>
+    <text x="10" y="178">{       \_/ </text>
+    <text x="10" y="194">   ___/|   </text>
+    <text x="10" y="208">.--'   |   </text>
+    <text x="80" y="208" class="nose">~sniff</text>
   </g>
 </svg>
