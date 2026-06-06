@@ -4,11 +4,12 @@
 
     .ground { fill: #6e7681; }
     .grass  { fill: #56d364; }
-    .house  { fill: #e3b341; }
-    .dog    { fill: #c9d1d9; stroke: #c9d1d9; stroke-width: 1; }
-    .nose   { fill: #ff7b72; }
-    .eye    { fill: #0d1117; }
-    .bark   { fill: #ffd33d; font-size: 22px; }
+    .house  { fill: #b85c38; }
+    .dog    { fill: #e0a35e; stroke: #a06a2c; stroke-width: 1.5; }
+    .ear    { fill: #b9802f; }
+    .nose   { fill: #3a2a1a; }
+    .eye    { fill: #2a1c0e; }
+    .bark   { fill: #7a4a18; font-size: 22px; }
 
     /*
       Timeline (18s loop):
@@ -115,7 +116,7 @@
     .bkl  { animation: bark-left  18s linear infinite; transform-origin: 120px 70px; }
   </style>
 
-  <rect width="860" height="240" fill="#0d1117"/>
+  <rect width="860" height="240" fill="#ffffff"/>
 
   <line x1="0" y1="190" x2="860" y2="190" class="ground" stroke="#6e7681" stroke-width="3"/>
 
@@ -127,7 +128,7 @@
     <path d="M820 190 L820 176 M820 184 L813 174 M820 184 L827 174" stroke="#56d364" stroke-width="2" fill="none"/>
   </g>
 
-  <g class="house" fill="none" stroke="#e3b341" stroke-width="3" stroke-linejoin="round">
+  <g class="house" fill="none" stroke="#b85c38" stroke-width="3" stroke-linejoin="round">
     <path d="M648 190 L648 150 L688 124 L728 150 L728 190 Z"/>
     <path d="M676 190 L676 162 L700 162 L700 190"/>
   </g>
@@ -156,7 +157,7 @@
       <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
       <circle cx="200" cy="120" r="24"/>
       <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
-      <path d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
+      <path class="ear" d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
     </g>
     <circle cx="232" cy="132" r="4" class="nose"/>
     <circle cx="210" cy="116" r="2.6" class="eye"/>
@@ -174,7 +175,7 @@
       <path d="M616 150 Q634 152 646 168 L660 178 Q648 188 628 184 Q616 170 616 150 Z"/>
       <circle cx="664" cy="180" r="20"/>
       <path d="M678 188 Q694 190 692 198 Q688 204 674 198 Q672 192 678 188 Z"/>
-      <path d="M628 132 Q616 130 616 150 Q616 168 624 180 Q630 188 640 182 Q636 168 638 152 Q640 138 636 132 Q632 128 628 132 Z"/>
+      <path class="ear" d="M628 132 Q616 130 616 150 Q616 168 624 180 Q630 188 640 182 Q636 168 638 152 Q640 138 636 132 Q632 128 628 132 Z"/>
       <circle cx="682" cy="186" r="4" class="nose"/>
       <circle cx="660" cy="172" r="2.6" class="eye"/>
     </g>
@@ -201,7 +202,7 @@
         <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
         <circle cx="200" cy="120" r="24"/>
         <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
-        <path d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
+        <path class="ear" d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
       </g>
       <circle cx="232" cy="132" r="4" class="nose"/>
       <circle cx="210" cy="116" r="2.6" class="eye"/>
@@ -221,7 +222,7 @@
         <path d="M616 150 Q634 152 646 168 L660 178 Q648 188 628 184 Q616 170 616 150 Z"/>
         <circle cx="664" cy="180" r="20"/>
         <path d="M678 188 Q694 190 692 198 Q688 204 674 198 Q672 192 678 188 Z"/>
-        <path d="M628 132 Q616 130 616 150 Q616 168 624 180 Q630 188 640 182 Q636 168 638 152 Q640 138 636 132 Q632 128 628 132 Z"/>
+        <path class="ear" d="M628 132 Q616 130 616 150 Q616 168 624 180 Q630 188 640 182 Q636 168 638 152 Q640 138 636 132 Q632 128 628 132 Z"/>
         <circle cx="682" cy="186" r="4" class="nose"/>
         <circle cx="660" cy="172" r="2.6" class="eye"/>
       </g>
