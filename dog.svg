@@ -1,61 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 860 230" width="860" height="230">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 240" width="860" height="240">
   <style>
-    text { font-family: monospace; font-size: 15px; }
+    text { font-family: 'Courier New', monospace; font-weight: bold; }
 
     .ground { fill: #6e7681; }
     .grass  { fill: #56d364; }
     .house  { fill: #e3b341; }
-    .dog    { fill: #c9d1d9; }
+    .dog    { fill: #c9d1d9; stroke: #c9d1d9; stroke-width: 1; }
     .nose   { fill: #ff7b72; }
+    .eye    { fill: #0d1117; }
+    .bark   { fill: #ffd33d; font-size: 22px; }
 
     /*
-      16-second cycle:
-        0%-30%   walk right (translateX 0 -> 430px)
-        30%-45%  sniff right (static at x=430 area)
-        45%-75%  walk left  (translateX 430 -> 0)
-        75%-90%  sniff left  (static at x=0 area)
-        90%-100% pause
+      Timeline (18s loop):
+        0 to 32%      walk right, dog travels left edge to right edge
+        32% to 40%    sniff right (head down), stationary at right
+        40% to 47%    bark right (woof), stationary at right
+        47% to 79%    walk left, dog travels right edge back to left edge
+        79% to 92%    sniff left (head down), stationary at left
+        92% to 100%   bark left (woof), stationary at left
     */
+
     @keyframes walk-right {
       0%    { transform: translateX(0px);   opacity: 1; }
-      30%   { transform: translateX(430px); opacity: 1; }
-      30.1% { transform: translateX(430px); opacity: 0; }
-      100%  { transform: translateX(430px); opacity: 0; }
+      32%   { transform: translateX(440px); opacity: 1; }
+      32.1% { transform: translateX(440px); opacity: 0; }
+      100%  { transform: translateX(440px); opacity: 0; }
     }
-    @keyframes sniff-right {
+    @keyframes pose-right {
       0%    { opacity: 0; }
-      29.9% { opacity: 0; }
-      30%   { opacity: 1; }
-      44.9% { opacity: 1; }
-      45%   { opacity: 0; }
+      31.9% { opacity: 0; }
+      32%   { opacity: 1; }
+      46.9% { opacity: 1; }
+      47%   { opacity: 0; }
       100%  { opacity: 0; }
     }
     @keyframes walk-left {
-      0%    { transform: translateX(430px); opacity: 0; }
-      44.9% { transform: translateX(430px); opacity: 0; }
-      45%   { transform: translateX(430px); opacity: 1; }
-      75%   { transform: translateX(0px);   opacity: 1; }
-      75.1% { transform: translateX(0px);   opacity: 0; }
+      0%    { transform: translateX(440px); opacity: 0; }
+      46.9% { transform: translateX(440px); opacity: 0; }
+      47%   { transform: translateX(440px); opacity: 1; }
+      79%   { transform: translateX(0px);   opacity: 1; }
+      79.1% { transform: translateX(0px);   opacity: 0; }
       100%  { transform: translateX(0px);   opacity: 0; }
     }
-    @keyframes sniff-left {
+    @keyframes pose-left {
       0%    { opacity: 0; }
-      74.9% { opacity: 0; }
-      75%   { opacity: 1; }
-      89.9% { opacity: 1; }
-      90%   { opacity: 0; }
+      78.9% { opacity: 0; }
+      79%   { opacity: 1; }
+      99.9% { opacity: 1; }
       100%  { opacity: 0; }
     }
-    @keyframes step {
+
+    /* leg gait: two alternating leg sets swapped fast while walking */
+    @keyframes legs-a {
       0%   { opacity: 1; }
       50%  { opacity: 0; }
       100% { opacity: 1; }
     }
-    @keyframes step-alt {
+    @keyframes legs-b {
       0%   { opacity: 0; }
       50%  { opacity: 1; }
       100% { opacity: 0; }
     }
+    /* tail wag */
     @keyframes wag-a {
       0%   { opacity: 1; }
       50%  { opacity: 0; }
@@ -67,123 +73,161 @@
       100% { opacity: 0; }
     }
 
-    .wr   { animation: walk-right  16s linear infinite; }
-    .sr   { animation: sniff-right 16s linear infinite; }
-    .wl   { animation: walk-left   16s linear infinite; }
-    .sl   { animation: sniff-left  16s linear infinite; }
-    .pa   { animation: step     0.35s steps(1) infinite; }
-    .pb   { animation: step-alt 0.35s steps(1) infinite; }
-    .ta   { animation: wag-a 0.3s steps(1) infinite; }
-    .tb   { animation: wag-b 0.3s steps(1) infinite; }
+    /* head bob during sniff (only visible in the sniff window, but harmless) */
+    @keyframes sniff-bob {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(3px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* bark text pulse: appears only during the bark windows */
+    @keyframes bark-right {
+      0%    { opacity: 0; transform: translateY(0px) scale(0.8); }
+      39.9% { opacity: 0; transform: translateY(0px) scale(0.8); }
+      41%   { opacity: 1; transform: translateY(-4px) scale(1.1); }
+      43%   { opacity: 1; transform: translateY(-4px) scale(1.0); }
+      45%   { opacity: 1; transform: translateY(-6px) scale(1.1); }
+      46.9% { opacity: 0; transform: translateY(-6px) scale(1.0); }
+      100%  { opacity: 0; transform: translateY(0px) scale(0.8); }
+    }
+    @keyframes bark-left {
+      0%    { opacity: 0; transform: translateY(0px) scale(0.8); }
+      91.9% { opacity: 0; transform: translateY(0px) scale(0.8); }
+      93%   { opacity: 1; transform: translateY(-4px) scale(1.1); }
+      95%   { opacity: 1; transform: translateY(-4px) scale(1.0); }
+      97%   { opacity: 1; transform: translateY(-6px) scale(1.1); }
+      99.9% { opacity: 0; transform: translateY(-6px) scale(1.0); }
+      100%  { opacity: 0; transform: translateY(0px) scale(0.8); }
+    }
+
+    .wr { animation: walk-right 18s linear infinite; }
+    .pr { animation: pose-right 18s linear infinite; }
+    .wl { animation: walk-left  18s linear infinite; }
+    .pl { animation: pose-left  18s linear infinite; }
+
+    .la { animation: legs-a 0.4s steps(1) infinite; }
+    .lb { animation: legs-b 0.4s steps(1) infinite; }
+    .ta { animation: wag-a  0.5s steps(1) infinite; }
+    .tb { animation: wag-b  0.5s steps(1) infinite; }
+
+    .bob  { animation: sniff-bob 0.9s ease-in-out infinite; }
+    .bkr  { animation: bark-right 18s linear infinite; transform-origin: 760px 70px; }
+    .bkl  { animation: bark-left  18s linear infinite; transform-origin: 120px 70px; }
   </style>
 
-  <!-- Background -->
-  <rect width="860" height="230" fill="#0d1117"/>
+  <rect width="860" height="240" fill="#0d1117"/>
 
-  <!-- Ground line -->
-  <text x="0" y="208" class="ground">_______________________________________________________________________________________</text>
+  <line x1="0" y1="190" x2="860" y2="190" class="ground" stroke="#6e7681" stroke-width="3"/>
 
-  <!-- Grass tufts -->
-  <text x="10"  y="198" class="grass">|'|'|</text>
-  <text x="100" y="198" class="grass">|'|</text>
-  <text x="195" y="198" class="grass">|'|'|</text>
-  <text x="295" y="198" class="grass">|'|</text>
-  <text x="400" y="198" class="grass">|'|'|</text>
-  <text x="500" y="198" class="grass">|'|</text>
-  <text x="590" y="198" class="grass">|'|'|</text>
-  <text x="775" y="198" class="grass">|'|'|</text>
-  <text x="840" y="198" class="grass">|'|</text>
+  <g class="grass">
+    <path d="M40 190 L40 176 M40 184 L33 174 M40 184 L47 174" stroke="#56d364" stroke-width="2" fill="none"/>
+    <path d="M160 190 L160 176 M160 184 L153 174 M160 184 L167 174" stroke="#56d364" stroke-width="2" fill="none"/>
+    <path d="M300 190 L300 176 M300 184 L293 174 M300 184 L307 174" stroke="#56d364" stroke-width="2" fill="none"/>
+    <path d="M540 190 L540 176 M540 184 L533 174 M540 184 L547 174" stroke="#56d364" stroke-width="2" fill="none"/>
+    <path d="M820 190 L820 176 M820 184 L813 174 M820 184 L827 174" stroke="#56d364" stroke-width="2" fill="none"/>
+  </g>
 
-  <!-- Doghouse (x=652, rows at y=130,146,162,178,194,210) -->
-  <text x="652" y="130" class="house">    /\    </text>
-  <text x="652" y="146" class="house">   /  \   </text>
-  <text x="652" y="162" class="house">  /----\  </text>
-  <text x="652" y="178" class="house"> | (  ) | </text>
-  <text x="652" y="194" class="house"> |      | </text>
-  <text x="652" y="210" class="house"> |______| </text>
+  <g class="house" fill="none" stroke="#e3b341" stroke-width="3" stroke-linejoin="round">
+    <path d="M648 190 L648 150 L688 124 L728 150 L728 190 Z"/>
+    <path d="M676 190 L676 162 L700 162 L700 190"/>
+  </g>
 
+  <!--
+    DOG_RIGHT base art (variant B), origin shifted so the dog's bounding box
+    sits with feet on the ground line at y=190 and left foot near x=60.
+    Original variant B spanned x 24..200, feet at y=120, head up.
+    Here the standing dog is drawn directly in scene coordinates.
+  -->
 
-  <!-- ======================================================= -->
-  <!-- WALKING RIGHT: group drawn at x=10, translateX 0->430   -->
-  <!-- ======================================================= -->
-  <g class="wr dog">
-    <!-- Static body/head rows -->
-    <text x="10" y="130">   _        </text>
-    <text x="10" y="146">  / )       </text>
-    <text x="10" y="162"> ( o--.___  </text>
-    <text x="10" y="178">  \_/  ___}</text>
-    <!-- Tail wag A (up) -->
-    <g class="ta">
-      <text x="10" y="162">          ~</text>
+  <!-- WALK RIGHT -->
+  <g class="wr">
+    <g class="dog">
+      <g class="ta"><path d="M84 150 Q62 144 58 120 Q56 102 74 108 Q68 120 70 128 Q74 136 86 140 Z"/></g>
+      <g class="tb"><path d="M84 150 Q60 150 50 130 Q44 116 62 112 Q60 124 66 132 Q72 140 86 144 Z"/></g>
+      <ellipse cx="132" cy="148" rx="56" ry="30"/>
+      <g class="la">
+        <rect x="94"  y="162" width="14" height="28" rx="6"/>
+        <rect x="152" y="162" width="14" height="28" rx="6"/>
+      </g>
+      <g class="lb">
+        <rect x="118" y="162" width="14" height="28" rx="6"/>
+        <rect x="176" y="162" width="14" height="28" rx="6"/>
+      </g>
+      <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
+      <circle cx="200" cy="120" r="24"/>
+      <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
+      <path d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
     </g>
-    <!-- Tail wag B (down) -->
-    <g class="tb">
-      <text x="10" y="178">          \</text>
+    <circle cx="232" cy="132" r="4" class="nose"/>
+    <circle cx="210" cy="116" r="2.6" class="eye"/>
+  </g>
+
+  <!-- SNIFF + BARK RIGHT (stationary at right side, head lowered to ground) -->
+  <g class="pr">
+    <g class="dog bob">
+      <path d="M524 150 Q502 144 498 120 Q496 102 514 108 Q508 120 510 128 Q514 136 526 140 Z"/>
+      <ellipse cx="572" cy="150" rx="56" ry="28"/>
+      <rect x="536" y="164" width="14" height="26" rx="6"/>
+      <rect x="560" y="166" width="14" height="24" rx="6"/>
+      <rect x="594" y="166" width="14" height="24" rx="6"/>
+      <rect x="612" y="164" width="14" height="26" rx="6"/>
+      <path d="M616 150 Q634 152 646 168 L660 178 Q648 188 628 184 Q616 170 616 150 Z"/>
+      <circle cx="664" cy="180" r="20"/>
+      <path d="M678 188 Q694 190 692 198 Q688 204 674 198 Q672 192 678 188 Z"/>
+      <path d="M628 132 Q616 130 616 150 Q616 168 624 180 Q630 188 640 182 Q636 168 638 152 Q640 138 636 132 Q632 128 628 132 Z"/>
+      <circle cx="682" cy="186" r="4" class="nose"/>
+      <circle cx="660" cy="172" r="2.6" class="eye"/>
     </g>
-    <!-- Leg pose A -->
-    <g class="pa">
-      <text x="10" y="194">   /\ /\   </text>
-      <text x="10" y="208">  /  V  \  </text>
-    </g>
-    <!-- Leg pose B -->
-    <g class="pb">
-      <text x="10" y="194">   || ||   </text>
-      <text x="10" y="208">  /   |  \ </text>
+    <g class="bkr">
+      <text x="700" y="120" class="bark">woof!</text>
     </g>
   </g>
 
-  <!-- ======================================================= -->
-  <!-- SNIFF RIGHT: static at x=430+10=440                     -->
-  <!-- ======================================================= -->
-  <g class="sr dog">
-    <text x="440" y="130">   _        </text>
-    <text x="440" y="146">  / )       </text>
-    <text x="440" y="162"> ( o--.___  </text>
-    <text x="440" y="178">  \_/      }</text>
-    <text x="440" y="194">   |\___   </text>
-    <text x="440" y="208">   |    '--.</text>
-    <text x="490" y="208" class="nose">sniff~</text>
-  </g>
-
-  <!-- ======================================================= -->
-  <!-- WALKING LEFT: group drawn at x=10, translateX 430->0    -->
-  <!-- ======================================================= -->
-  <g class="wl dog">
-    <!-- Static body/head rows (mirror of right) -->
-    <text x="10" y="130">        _   </text>
-    <text x="10" y="146">       ( \  </text>
-    <text x="10" y="162">  ___.--o ) </text>
-    <text x="10" y="178">{___  \_/  </text>
-    <!-- Tail wag A (up) -->
-    <g class="ta">
-      <text x="10" y="162">~          </text>
-    </g>
-    <!-- Tail wag B (down) -->
-    <g class="tb">
-      <text x="10" y="178">/          </text>
-    </g>
-    <!-- Leg pose A -->
-    <g class="pa">
-      <text x="10" y="194">   /\ /\   </text>
-      <text x="10" y="208">  /  V  \  </text>
-    </g>
-    <!-- Leg pose B -->
-    <g class="pb">
-      <text x="10" y="194">   || ||   </text>
-      <text x="10" y="208">  /   |  \ </text>
+  <!-- WALK LEFT (mirror of walk-right via scaleX) -->
+  <g class="wl">
+    <g transform="translate(264,0) scale(-1,1)">
+      <g class="dog">
+        <g class="ta"><path d="M84 150 Q62 144 58 120 Q56 102 74 108 Q68 120 70 128 Q74 136 86 140 Z"/></g>
+        <g class="tb"><path d="M84 150 Q60 150 50 130 Q44 116 62 112 Q60 124 66 132 Q72 140 86 144 Z"/></g>
+        <ellipse cx="132" cy="148" rx="56" ry="30"/>
+        <g class="la">
+          <rect x="94"  y="162" width="14" height="28" rx="6"/>
+          <rect x="152" y="162" width="14" height="28" rx="6"/>
+        </g>
+        <g class="lb">
+          <rect x="118" y="162" width="14" height="28" rx="6"/>
+          <rect x="176" y="162" width="14" height="28" rx="6"/>
+        </g>
+        <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
+        <circle cx="200" cy="120" r="24"/>
+        <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
+        <path d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
+      </g>
+      <circle cx="232" cy="132" r="4" class="nose"/>
+      <circle cx="210" cy="116" r="2.6" class="eye"/>
     </g>
   </g>
 
-  <!-- ======================================================= -->
-  <!-- SNIFF LEFT: static at x=10                              -->
-  <!-- ======================================================= -->
-  <g class="sl dog">
-    <text x="10" y="130">        _   </text>
-    <text x="10" y="146">       ( \  </text>
-    <text x="10" y="162">  ___.--o ) </text>
-    <text x="10" y="178">{       \_/ </text>
-    <text x="10" y="194">   ___/|   </text>
-    <text x="10" y="208">.--'   |   </text>
-    <text x="80" y="208" class="nose">~sniff</text>
+  <!-- SNIFF + BARK LEFT (stationary at left side, head lowered to ground) -->
+  <g class="pl">
+    <g transform="translate(732,0) scale(-1,1)">
+      <g class="dog bob">
+        <path d="M524 150 Q502 144 498 120 Q496 102 514 108 Q508 120 510 128 Q514 136 526 140 Z"/>
+        <ellipse cx="572" cy="150" rx="56" ry="28"/>
+        <rect x="536" y="164" width="14" height="26" rx="6"/>
+        <rect x="560" y="166" width="14" height="24" rx="6"/>
+        <rect x="594" y="166" width="14" height="24" rx="6"/>
+        <rect x="612" y="164" width="14" height="26" rx="6"/>
+        <path d="M616 150 Q634 152 646 168 L660 178 Q648 188 628 184 Q616 170 616 150 Z"/>
+        <circle cx="664" cy="180" r="20"/>
+        <path d="M678 188 Q694 190 692 198 Q688 204 674 198 Q672 192 678 188 Z"/>
+        <path d="M628 132 Q616 130 616 150 Q616 168 624 180 Q630 188 640 182 Q636 168 638 152 Q640 138 636 132 Q632 128 628 132 Z"/>
+        <circle cx="682" cy="186" r="4" class="nose"/>
+        <circle cx="660" cy="172" r="2.6" class="eye"/>
+      </g>
+    </g>
+    <g class="bkl">
+      <text x="60" y="120" class="bark">woof!</text>
+    </g>
   </g>
 </svg>
