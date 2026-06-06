@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 800 200" width="800" height="200">
+  <style>
+    text {
+      font-family: monospace;
+      font-size: 14px;
+      fill: #58a6ff;
+    }
+    .grass { fill: #3fb950; }
+    .house { fill: #d29922; }
+    .ground { fill: #8b949e; }
+
+    /*
+      12-second cycle:
+        0%-30%  walk right  (0 -> 420px)
+        30%-45% sniff right (hold at 420px)
+        45%-75% walk left   (420px -> 0)
+        75%-90% sniff left  (hold at 0)
+        90%-100% hold, then loop
+    */
+    @keyframes walk-right {
+      0%    { transform: translateX(0px);   opacity: 1; }
+      30%   { transform: translateX(420px); opacity: 1; }
+      30.1% { opacity: 0; }
+      100%  { transform: translateX(420px); opacity: 0; }
+    }
+    @keyframes sniff-right {
+      0%    { opacity: 0; }
+      29.9% { opacity: 0; }
+      30%   { opacity: 1; }
+      44.9% { opacity: 1; }
+      45%   { opacity: 0; }
+      100%  { opacity: 0; }
+    }
+    @keyframes walk-left {
+      0%    { transform: translateX(420px); opacity: 0; }
+      44.9% { opacity: 0; }
+      45%   { transform: translateX(420px); opacity: 1; }
+      75%   { transform: translateX(0px);   opacity: 1; }
+      75.1% { opacity: 0; }
+      100%  { transform: translateX(0px);   opacity: 0; }
+    }
+    @keyframes sniff-left {
+      0%    { opacity: 0; }
+      74.9% { opacity: 0; }
+      75%   { opacity: 1; }
+      89.9% { opacity: 1; }
+      90%   { opacity: 0; }
+      100%  { opacity: 0; }
+    }
+    @keyframes legs {
+      0%   { opacity: 1; }
+      50%  { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .dog-walk-right  { animation: walk-right  12s linear infinite; }
+    .dog-sniff-right { animation: sniff-right 12s linear infinite; }
+    .dog-walk-left   { animation: walk-left   12s linear infinite; }
+    .dog-sniff-left  { animation: sniff-left  12s linear infinite; }
+    .legs-a { animation: legs 0.4s steps(1) infinite; }
+    .legs-b { animation: legs 0.4s steps(1) infinite reverse; }
+  </style>
+
+  <!-- Ground -->
+  <text x="0" y="178" class="ground">________________________________________________________________________________</text>
+
+  <!-- Grass tufts -->
+  <text x="25"  y="168" class="grass">,',</text>
+  <text x="120" y="168" class="grass">,',,</text>
+  <text x="220" y="168" class="grass">,,',</text>
+  <text x="330" y="168" class="grass">','</text>
+  <text x="460" y="168" class="grass">,,','</text>
+  <text x="580" y="168" class="grass">',',,</text>
+  <text x="700" y="168" class="grass">,,',</text>
+  <text x="770" y="168" class="grass">',</text>
+
+  <!-- Doghouse -->
+  <text x="625" y="112" class="house">  /\  </text>
+  <text x="625" y="128" class="house"> /  \ </text>
+  <text x="625" y="144" class="house">|    |</text>
+  <text x="625" y="160" class="house">| [] |</text>
+  <text x="625" y="176" class="house">|____|</text>
+
+  <!--
+    Dog art (~80px wide at 14px monospace):
+    Facing right:
+      ___ ___
+     (oo)|   |
+      \/.|   |
+       /\  /\
+    Facing left:
+      ___ ___
+     |   |(oo)
+     |   |.\/
+      /\  /\
+  -->
+
+  <!-- Walking right -->
+  <g class="dog-walk-right">
+    <text x="10" y="122">___  ___</text>
+    <text x="10" y="138">(oo)|   |</text>
+    <text x="10" y="154"> \/ |   |</text>
+    <g class="legs-a">
+      <text x="10" y="170"> /\   /\</text>
+    </g>
+    <g class="legs-b">
+      <text x="10" y="170">  /\  /\ </text>
+    </g>
+  </g>
+
+  <!-- Sniffing right (held at x=420) -->
+  <g class="dog-sniff-right">
+    <text x="420" y="122">  ___   </text>
+    <text x="420" y="138"> (oo)  </text>
+    <text x="420" y="154">  \/___..</text>
+    <text x="420" y="170">  || ||  </text>
+    <text x="505" y="154" class="ground">sniff</text>
+  </g>
+
+  <!-- Walking left -->
+  <g class="dog-walk-left">
+    <text x="10" y="122">___  ___ </text>
+    <text x="10" y="138">|   |(oo)</text>
+    <text x="10" y="154">|   | \/ </text>
+    <g class="legs-a">
+      <text x="10" y="170"> /\   /\</text>
+    </g>
+    <g class="legs-b">
+      <text x="10" y="170">  /\  /\ </text>
+    </g>
+  </g>
+
+  <!-- Sniffing left (held at x=0) -->
+  <g class="dog-sniff-left">
+    <text x="10" y="122">  ___   </text>
+    <text x="10" y="138"> (oo)   </text>
+    <text x="10" y="154">..___\/  </text>
+    <text x="10" y="170"> || ||   </text>
+    <text x="95" y="154" class="ground">sniff</text>
+  </g>
+</svg>
