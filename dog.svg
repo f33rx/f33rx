@@ -102,46 +102,6 @@
   <text x="652" y="194" class="house"> |      | </text>
   <text x="652" y="210" class="house"> |______| </text>
 
-  <!--
-    DOG DESIGN (7-bit ASCII only):
-
-    Facing right (body ~12 chars wide):
-
-       _
-      / )        <- floppy ear, head curve
-     ( o--.__    <- eye, snout going right, body starts
-      \_/   |~~  <- head bottom, body middle, tail up
-        \___/    <- body bottom / haunches
-        |   |    <- leg connector
-       (legs)
-
-    Leg pose A (striding):
-       / \ / \
-      /   X   \
-
-    Leg pose B (striding other way):
-       | | | |
-      /   |   \
-
-    Actually keep it simple - two leg rows:
-    Pose A:  " /\ /\"  then " /  \/  \"   <- spread
-    Pose B:  " |\ /|"  then " /       \"  <- crossing
-
-    Tail:  row 3 ends in "~~" (up) or "~\" (down) alternating
-
-    Facing left: mirror image
-
-    Sniff right: head dipped, nose near ground:
-       _
-      / )
-     ( o--.
-      \_/  '---.
-        \___   |
-         \  '--'  <- snout on ground
-          sniff~
-
-    Sniff left: mirror
-  -->
 
   <!-- ======================================================= -->
   <!-- WALKING RIGHT: group drawn at x=10, translateX 0->430   -->
