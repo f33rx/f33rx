@@ -28,12 +28,20 @@
       100%  { transform: translateX(440px); opacity: 0; }
     }
     @keyframes pose-right {
-      0%    { opacity: 0; }
-      31.9% { opacity: 0; }
-      32%   { opacity: 1; }
-      46.9% { opacity: 1; }
-      47%   { opacity: 0; }
-      100%  { opacity: 0; }
+      0%     { opacity: 0; }
+      31.9%  { opacity: 0; }
+      32%    { opacity: 1; }
+      39.9%  { opacity: 1; }
+      39.95% { opacity: 0; }
+      100%   { opacity: 0; }
+    }
+    @keyframes barkpose-right {
+      0%     { opacity: 0; }
+      39.95% { opacity: 0; }
+      40%    { opacity: 1; }
+      46.9%  { opacity: 1; }
+      47%    { opacity: 0; }
+      100%   { opacity: 0; }
     }
     @keyframes walk-left {
       0%    { transform: translateX(440px); opacity: 0; }
@@ -44,11 +52,19 @@
       100%  { transform: translateX(0px);   opacity: 0; }
     }
     @keyframes pose-left {
-      0%    { opacity: 0; }
-      78.9% { opacity: 0; }
-      79%   { opacity: 1; }
-      99.9% { opacity: 1; }
-      100%  { opacity: 0; }
+      0%     { opacity: 0; }
+      78.9%  { opacity: 0; }
+      79%    { opacity: 1; }
+      91.9%  { opacity: 1; }
+      91.95% { opacity: 0; }
+      100%   { opacity: 0; }
+    }
+    @keyframes barkpose-left {
+      0%     { opacity: 0; }
+      91.95% { opacity: 0; }
+      92%    { opacity: 1; }
+      99.9%  { opacity: 1; }
+      100%   { opacity: 0; }
     }
 
     /* leg gait: two alternating leg sets swapped fast while walking */
@@ -105,6 +121,8 @@
     .pr { animation: pose-right 18s linear infinite; }
     .wl { animation: walk-left  18s linear infinite; }
     .pl { animation: pose-left  18s linear infinite; }
+    .br { animation: barkpose-right 18s linear infinite; }
+    .bl { animation: barkpose-left  18s linear infinite; }
 
     .la { animation: legs-a 0.4s steps(1) infinite; }
     .lb { animation: legs-b 0.4s steps(1) infinite; }
@@ -163,7 +181,7 @@
     <circle cx="210" cy="116" r="2.6" class="eye"/>
   </g>
 
-  <!-- SNIFF + BARK RIGHT (stationary at right side, head lowered to ground) -->
+  <!-- SNIFF RIGHT (stationary at right side, head lowered to the ground) -->
   <g class="pr">
     <g class="dog bob">
       <path d="M524 150 Q502 144 498 120 Q496 102 514 108 Q508 120 510 128 Q514 136 526 140 Z"/>
@@ -178,6 +196,27 @@
       <path class="ear" d="M628 132 Q616 130 616 150 Q616 168 624 180 Q630 188 640 182 Q636 168 638 152 Q640 138 636 132 Q632 128 628 132 Z"/>
       <circle cx="682" cy="186" r="4" class="nose"/>
       <circle cx="660" cy="172" r="2.6" class="eye"/>
+    </g>
+  </g>
+
+  <!-- BARK RIGHT (stationary at right side, head UP; walk art frozen at end of walk) -->
+  <g class="br">
+    <g transform="translate(440,0)">
+      <g class="dog">
+        <g class="ta"><path d="M84 150 Q62 144 58 120 Q56 102 74 108 Q68 120 70 128 Q74 136 86 140 Z"/></g>
+        <g class="tb"><path d="M84 150 Q60 150 50 130 Q44 116 62 112 Q60 124 66 132 Q72 140 86 144 Z"/></g>
+        <ellipse cx="132" cy="148" rx="56" ry="30"/>
+        <rect x="94"  y="162" width="14" height="28" rx="6"/>
+        <rect x="118" y="162" width="14" height="28" rx="6"/>
+        <rect x="152" y="162" width="14" height="28" rx="6"/>
+        <rect x="176" y="162" width="14" height="28" rx="6"/>
+        <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
+        <circle cx="200" cy="120" r="24"/>
+        <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
+        <path class="ear" d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
+      </g>
+      <circle cx="232" cy="132" r="4" class="nose"/>
+      <circle cx="210" cy="116" r="2.6" class="eye"/>
     </g>
     <g class="bkr">
       <text x="700" y="120" class="bark">woof!</text>
@@ -209,7 +248,7 @@
     </g>
   </g>
 
-  <!-- SNIFF + BARK LEFT (stationary at left side, head lowered to ground) -->
+  <!-- SNIFF LEFT (stationary at left side, head lowered to the ground) -->
   <g class="pl">
     <g transform="translate(732,0) scale(-1,1)">
       <g class="dog bob">
@@ -227,8 +266,29 @@
         <circle cx="660" cy="172" r="2.6" class="eye"/>
       </g>
     </g>
+  </g>
+
+  <!-- BARK LEFT (stationary at left side, head UP; walk-left art frozen at end of walk) -->
+  <g class="bl">
+    <g transform="translate(264,0) scale(-1,1)">
+      <g class="dog">
+        <g class="ta"><path d="M84 150 Q62 144 58 120 Q56 102 74 108 Q68 120 70 128 Q74 136 86 140 Z"/></g>
+        <g class="tb"><path d="M84 150 Q60 150 50 130 Q44 116 62 112 Q60 124 66 132 Q72 140 86 144 Z"/></g>
+        <ellipse cx="132" cy="148" rx="56" ry="30"/>
+        <rect x="94"  y="162" width="14" height="28" rx="6"/>
+        <rect x="118" y="162" width="14" height="28" rx="6"/>
+        <rect x="152" y="162" width="14" height="28" rx="6"/>
+        <rect x="176" y="162" width="14" height="28" rx="6"/>
+        <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
+        <circle cx="200" cy="120" r="24"/>
+        <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
+        <path class="ear" d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
+      </g>
+      <circle cx="232" cy="132" r="4" class="nose"/>
+      <circle cx="210" cy="116" r="2.6" class="eye"/>
+    </g>
     <g class="bkl">
-      <text x="60" y="120" class="bark">woof!</text>
+      <text x="92" y="104" class="bark">woof!</text>
     </g>
   </g>
 </svg>
