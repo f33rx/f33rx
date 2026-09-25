@@ -1,17 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 240" width="860" height="240">
   <style>
     text { font-family: 'Courier New', monospace; font-weight: bold; }
-
-    .ground { fill: #6e7681; }
-    .grass  { fill: #56d364; }
-    .house  { fill: #b85c38; }
-    .dog    { fill: #e0a35e; stroke: #a06a2c; stroke-width: 1.5; }
-    .ear    { fill: #b9802f; }
-    .nose   { fill: #3a2a1a; }
-    .eye    { fill: #2a1c0e; }
-    .bark   { fill: #7a4a18; font-size: 22px; }
+    .bark { fill: #7a4a18; font-size: 22px; }
 
     /*
+      Hidden phases also set visibility so the browser skips painting the
+      five idle dog instances and their fur filters.
+
       Timeline (18s loop):
         0 to 32%      walk right, dog travels left edge to right edge
         32% to 40%    sniff right (head down), stationary at right
@@ -22,79 +17,49 @@
     */
 
     @keyframes walk-right {
-      0%    { transform: translateX(0px);   opacity: 1; }
-      32%   { transform: translateX(440px); opacity: 1; }
-      32.1% { transform: translateX(440px); opacity: 0; }
-      100%  { transform: translateX(440px); opacity: 0; }
+      0%    { transform: translateX(0px);   opacity: 1; visibility: visible; }
+      32%   { transform: translateX(440px); opacity: 1; visibility: visible; }
+      32.1% { transform: translateX(440px); opacity: 0; visibility: hidden; }
+      100%  { transform: translateX(440px); opacity: 0; visibility: hidden; }
     }
     @keyframes pose-right {
-      0%     { opacity: 0; }
-      31.9%  { opacity: 0; }
-      32%    { opacity: 1; }
-      39.9%  { opacity: 1; }
-      39.95% { opacity: 0; }
-      100%   { opacity: 0; }
+      0%     { opacity: 0; visibility: hidden; }
+      31.9%  { opacity: 0; visibility: hidden; }
+      32%    { opacity: 1; visibility: visible; }
+      39.9%  { opacity: 1; visibility: visible; }
+      39.95% { opacity: 0; visibility: hidden; }
+      100%   { opacity: 0; visibility: hidden; }
     }
     @keyframes barkpose-right {
-      0%     { opacity: 0; }
-      39.95% { opacity: 0; }
-      40%    { opacity: 1; }
-      46.9%  { opacity: 1; }
-      47%    { opacity: 0; }
-      100%   { opacity: 0; }
+      0%     { opacity: 0; visibility: hidden; }
+      39.95% { opacity: 0; visibility: hidden; }
+      40%    { opacity: 1; visibility: visible; }
+      46.9%  { opacity: 1; visibility: visible; }
+      47%    { opacity: 0; visibility: hidden; }
+      100%   { opacity: 0; visibility: hidden; }
     }
     @keyframes walk-left {
-      0%    { transform: translateX(440px); opacity: 0; }
-      46.9% { transform: translateX(440px); opacity: 0; }
-      47%   { transform: translateX(440px); opacity: 1; }
-      79%   { transform: translateX(0px);   opacity: 1; }
-      79.1% { transform: translateX(0px);   opacity: 0; }
-      100%  { transform: translateX(0px);   opacity: 0; }
+      0%    { transform: translateX(440px); opacity: 0; visibility: hidden; }
+      46.9% { transform: translateX(440px); opacity: 0; visibility: hidden; }
+      47%   { transform: translateX(440px); opacity: 1; visibility: visible; }
+      79%   { transform: translateX(0px);   opacity: 1; visibility: visible; }
+      79.1% { transform: translateX(0px);   opacity: 0; visibility: hidden; }
+      100%  { transform: translateX(0px);   opacity: 0; visibility: hidden; }
     }
     @keyframes pose-left {
-      0%     { opacity: 0; }
-      78.9%  { opacity: 0; }
-      79%    { opacity: 1; }
-      91.9%  { opacity: 1; }
-      91.95% { opacity: 0; }
-      100%   { opacity: 0; }
+      0%     { opacity: 0; visibility: hidden; }
+      78.9%  { opacity: 0; visibility: hidden; }
+      79%    { opacity: 1; visibility: visible; }
+      91.9%  { opacity: 1; visibility: visible; }
+      91.95% { opacity: 0; visibility: hidden; }
+      100%   { opacity: 0; visibility: hidden; }
     }
     @keyframes barkpose-left {
-      0%     { opacity: 0; }
-      91.95% { opacity: 0; }
-      92%    { opacity: 1; }
-      99.9%  { opacity: 1; }
-      100%   { opacity: 0; }
-    }
-
-    /* leg gait: two alternating leg sets swapped fast while walking */
-    @keyframes legs-a {
-      0%   { opacity: 1; }
-      50%  { opacity: 0; }
-      100% { opacity: 1; }
-    }
-    @keyframes legs-b {
-      0%   { opacity: 0; }
-      50%  { opacity: 1; }
-      100% { opacity: 0; }
-    }
-    /* tail wag */
-    @keyframes wag-a {
-      0%   { opacity: 1; }
-      50%  { opacity: 0; }
-      100% { opacity: 1; }
-    }
-    @keyframes wag-b {
-      0%   { opacity: 0; }
-      50%  { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    /* head bob during sniff (only visible in the sniff window, but harmless) */
-    @keyframes sniff-bob {
-      0%   { transform: translateY(0px); }
-      50%  { transform: translateY(3px); }
-      100% { transform: translateY(0px); }
+      0%     { opacity: 0; visibility: hidden; }
+      91.95% { opacity: 0; visibility: hidden; }
+      92%    { opacity: 1; visibility: visible; }
+      99.9%  { opacity: 1; visibility: visible; }
+      100%   { opacity: 0; visibility: hidden; }
     }
 
     /* bark text pulse: appears only during the bark windows */
@@ -119,176 +84,394 @@
 
     .wr { animation: walk-right 18s linear infinite; }
     .pr { animation: pose-right 18s linear infinite; }
+    .br { animation: barkpose-right 18s linear infinite; }
     .wl { animation: walk-left  18s linear infinite; }
     .pl { animation: pose-left  18s linear infinite; }
-    .br { animation: barkpose-right 18s linear infinite; }
     .bl { animation: barkpose-left  18s linear infinite; }
+    .bkr { animation: bark-right 18s linear infinite; transform-origin: 730px 40px; }
+    .bkl { animation: bark-left  18s linear infinite; transform-origin: 64px 40px; }
 
-    .la { animation: legs-a 0.4s steps(1) infinite; }
-    .lb { animation: legs-b 0.4s steps(1) infinite; }
-    .ta { animation: wag-a  0.5s steps(1) infinite; }
-    .tb { animation: wag-b  0.5s steps(1) infinite; }
+    /*
+      Gait. Each leg group sits at its own pivot (shoulder or hip) so a plain
+      rotate swings it. Lateral-sequence walk: near-hind, near-fore, far-hind,
+      far-fore each a quarter cycle apart.
+    */
+    @keyframes swing {
+      0%   { transform: rotate(-17deg); }
+      50%  { transform: rotate(17deg); }
+      100% { transform: rotate(-17deg); }
+    }
+    .leg-nh { animation: swing 0.6s ease-in-out -0.30s infinite; }
+    .leg-nf { animation: swing 0.6s ease-in-out -0.45s infinite; }
+    .leg-fh { animation: swing 0.6s ease-in-out  0.00s infinite; }
+    .leg-ff { animation: swing 0.6s ease-in-out -0.15s infinite; }
 
-    .bob  { animation: sniff-bob 0.9s ease-in-out infinite; }
-    .bkr  { animation: bark-right 18s linear infinite; transform-origin: 760px 70px; }
-    .bkl  { animation: bark-left  18s linear infinite; transform-origin: 120px 70px; }
+    @keyframes bob-walk {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(-1.6px); }
+      100% { transform: translateY(0px); }
+    }
+    .bob-walk { animation: bob-walk 0.3s ease-in-out infinite; }
+
+    @keyframes nod {
+      0%   { transform: rotate(-1.5deg); }
+      50%  { transform: rotate(1.5deg); }
+      100% { transform: rotate(-1.5deg); }
+    }
+    .head-walk { animation: nod 0.6s ease-in-out infinite; }
+
+    @keyframes ear-sway {
+      0%   { transform: rotate(-3deg); }
+      50%  { transform: rotate(4deg); }
+      100% { transform: rotate(-3deg); }
+    }
+    .ear-walk { animation: ear-sway 0.6s ease-in-out infinite; }
+
+    @keyframes wag {
+      0%   { transform: rotate(-9deg); }
+      50%  { transform: rotate(9deg); }
+      100% { transform: rotate(-9deg); }
+    }
+    .tail-walk { animation: wag 0.5s ease-in-out infinite; }
+    .tail-bark { animation: wag 0.35s ease-in-out infinite; }
+
+    @keyframes wag-slow {
+      0%   { transform: rotate(-5deg); }
+      50%  { transform: rotate(6deg); }
+      100% { transform: rotate(-5deg); }
+    }
+    .tail-sniff { animation: wag-slow 1.2s ease-in-out infinite; }
+
+    @keyframes sniff {
+      0%   { transform: rotate(0deg); }
+      50%  { transform: rotate(5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .head-sniff { animation: sniff 1.1s ease-in-out infinite; }
+
+    @keyframes bark-bob {
+      0%   { transform: rotate(0deg); }
+      40%  { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .head-bark { animation: bark-bob 0.45s ease-in-out infinite; }
   </style>
 
+  <defs>
+    <!-- coat -->
+    <linearGradient id="gBody" gradientUnits="userSpaceOnUse" x1="0" y1="-116" x2="0" y2="-44">
+      <stop offset="0" stop-color="#bf7f2b"/>
+      <stop offset="0.3" stop-color="#dca24a"/>
+      <stop offset="0.7" stop-color="#ecbf70"/>
+      <stop offset="1" stop-color="#f5dca6"/>
+    </linearGradient>
+    <radialGradient id="gHi" gradientUnits="userSpaceOnUse" cx="30" cy="-84" r="34">
+      <stop offset="0" stop-color="#fff3d0" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#fff3d0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gLo" gradientUnits="userSpaceOnUse" cx="-8" cy="-60" r="52"
+      gradientTransform="translate(-8,-60) scale(1,0.24) translate(8,60)">
+      <stop offset="0" stop-color="#6b4514" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#6b4514" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gHead" gradientUnits="userSpaceOnUse" cx="60" cy="-48" r="64">
+      <stop offset="0" stop-color="#f0c46e"/>
+      <stop offset="0.5" stop-color="#dea64c"/>
+      <stop offset="1" stop-color="#b57628"/>
+    </radialGradient>
+    <radialGradient id="gEar" gradientUnits="userSpaceOnUse" cx="-2" cy="18" r="34">
+      <stop offset="0" stop-color="#c8863b"/>
+      <stop offset="0.6" stop-color="#a5671f"/>
+      <stop offset="1" stop-color="#86501a"/>
+    </radialGradient>
+    <linearGradient id="gLeg" gradientUnits="userSpaceOnUse" x1="-10" y1="0" x2="20" y2="0">
+      <stop offset="0" stop-color="#b87a2c"/>
+      <stop offset="0.5" stop-color="#e2aa54"/>
+      <stop offset="1" stop-color="#eec276"/>
+    </linearGradient>
+    <radialGradient id="gHind" gradientUnits="userSpaceOnUse" cx="-2" cy="24" r="48">
+      <stop offset="0" stop-color="#ebb45c"/>
+      <stop offset="0.6" stop-color="#d69b44"/>
+      <stop offset="1" stop-color="#ad722a"/>
+    </radialGradient>
+    <linearGradient id="gTail" gradientUnits="userSpaceOnUse" x1="0" y1="-16" x2="0" y2="16">
+      <stop offset="0" stop-color="#c68a33"/>
+      <stop offset="0.5" stop-color="#e1a952"/>
+      <stop offset="1" stop-color="#f0cc88"/>
+    </linearGradient>
+    <linearGradient id="gGround" gradientUnits="userSpaceOnUse" x1="0" y1="186" x2="0" y2="240">
+      <stop offset="0" stop-color="#e6e0d3"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+
+    <!--
+      Fur: a horizontally streaked noise is overlaid inside the silhouette for
+      hair-direction texture, then a second noise displaces the edge so the
+      outline reads as hair rather than a clean vector edge.
+    -->
+    <filter id="fur" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06 0.5" numOctaves="3" seed="5" result="grain"/>
+      <feColorMatrix in="grain" type="matrix"
+        values="0.14 0.14 0.14 0 0.29  0.14 0.14 0.14 0 0.29  0.14 0.14 0.14 0 0.29  0 0 0 0 1" result="gray"/>
+      <feComposite in="gray" in2="SourceGraphic" operator="in" result="grainClip"/>
+      <feBlend in="grainClip" in2="SourceGraphic" mode="overlay" result="textured"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.08 0.35" numOctaves="2" seed="11" result="edge"/>
+      <feDisplacementMap in="textured" in2="edge" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- far-side limbs sit in the body's shadow -->
+    <filter id="dim" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="0.72 0 0 0 0  0 0.7 0 0 0  0 0 0.68 0 0  0 0 0 1 0"/>
+    </filter>
+    <filter id="soft" x="-20%" y="-150%" width="140%" height="400%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+
+    <clipPath id="cBody">
+      <path d="M 28,-110 C 0,-116 -30,-114 -46,-106 C -62,-98 -70,-84 -66,-68 C -63,-56 -52,-52 -36,-56 C -14,-60 6,-58 26,-52 C 44,-47 62,-50 68,-62 C 74,-76 68,-92 52,-102 C 44,-108 36,-110 28,-110 Z"/>
+    </clipPath>
+    <clipPath id="cHead">
+      <path d="M -14,-4 C 0,-22 22,-36 38,-42 C 44,-54 62,-60 76,-48 C 80,-46 82,-44 86,-42 C 94,-38 102,-32 106,-26 C 108,-22 106,-16 102,-15 C 94,-12 84,-12 78,-9 C 74,-6 68,-4 60,-2 C 48,4 32,14 10,18 C 0,18 -10,10 -14,-4 Z"/>
+    </clipPath>
+
+    <!--
+      Parts. Dog-local coordinates: origin on the ground under the body centre,
+      facing right, y up is negative. Legs, tail and ear are drawn relative to
+      their own pivot so a rotate on the enclosing group swings them.
+    -->
+    <g id="body">
+      <path d="M -50,-54 L -44,-43 L -38,-55 L -30,-45 L -22,-57 L -14,-47 L -6,-58 L 2,-48 L 10,-57 L 18,-47 L 26,-52 L 34,-43 L 42,-48 L 50,-52 Z" fill="#f5dfa9"/>
+      <path d="M 28,-110 C 0,-116 -30,-114 -46,-106 C -62,-98 -70,-84 -66,-68 C -63,-56 -52,-52 -36,-56 C -14,-60 6,-58 26,-52 C 44,-47 62,-50 68,-62 C 74,-76 68,-92 52,-102 C 44,-108 36,-110 28,-110 Z" fill="url(#gBody)"/>
+      <g clip-path="url(#cBody)">
+        <ellipse cx="30" cy="-84" rx="34" ry="24" fill="url(#gHi)"/>
+        <ellipse cx="-8" cy="-60" rx="52" ry="14" fill="url(#gLo)"/>
+        <path d="M 24,-108 C 0,-113 -30,-111 -48,-104" fill="none" stroke="#f7d98e" stroke-width="5" stroke-linecap="round" opacity="0.35"/>
+        <g fill="none" stroke="#a26a26" stroke-width="2" stroke-linecap="round" opacity="0.16">
+          <path d="M 18,-106 C 2,-104 -16,-98 -34,-88"/>
+          <path d="M 6,-100 C -8,-96 -24,-90 -44,-78"/>
+          <path d="M 34,-96 C 24,-86 14,-78 6,-70"/>
+          <path d="M 46,-84 C 40,-74 32,-66 22,-58"/>
+          <path d="M -50,-96 C -56,-86 -58,-74 -54,-64"/>
+          <path d="M -30,-72 C -24,-66 -14,-62 -2,-60"/>
+        </g>
+        <g fill="none" stroke="#f8e6bc" stroke-width="1.8" stroke-linecap="round" opacity="0.3">
+          <path d="M 24,-100 C 8,-98 -8,-92 -24,-84"/>
+          <path d="M 40,-90 C 30,-80 22,-72 12,-66"/>
+          <path d="M -40,-100 C -52,-92 -58,-80 -56,-70"/>
+          <path d="M -20,-58 C -8,-56 8,-54 22,-52"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- neck and head, relative to the neck pivot at the withers -->
+    <g id="headfur">
+      <path d="M -14,-4 C 0,-22 22,-36 38,-42 C 44,-54 62,-60 76,-48 C 80,-46 82,-44 86,-42 C 94,-38 102,-32 106,-26 C 108,-22 106,-16 102,-15 C 94,-12 84,-12 78,-9 C 74,-6 68,-4 60,-2 C 48,4 32,14 10,18 C 0,18 -10,10 -14,-4 Z" fill="url(#gHead)"/>
+      <g clip-path="url(#cHead)">
+        <ellipse cx="38" cy="6" rx="26" ry="11" fill="#f3d9a2" opacity="0.5"/>
+        <ellipse cx="90" cy="-24" rx="15" ry="9" fill="#f2d29a" opacity="0.35"/>
+        <ellipse cx="70" cy="-24" rx="12" ry="7" fill="#a86f2a" opacity="0.18"/>
+        <g fill="none" stroke="#a26a26" stroke-width="1.8" stroke-linecap="round" opacity="0.14">
+          <path d="M 30,-30 C 38,-24 44,-16 44,-6"/>
+          <path d="M 10,-14 C 18,-8 26,0 28,8"/>
+          <path d="M 20,-26 C 30,-20 36,-10 38,0"/>
+        </g>
+        <path d="M 50,-52 C 56,-50 62,-46 66,-42" fill="none" stroke="#f8e6bc" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+      </g>
+    </g>
+    <g id="headfur-open">
+      <path d="M -14,-4 C 0,-22 22,-36 38,-42 C 44,-54 62,-60 76,-48 C 80,-46 82,-44 86,-42 C 94,-38 102,-32 106,-26 C 108,-22 106,-16 102,-15 C 94,-12 84,-12 78,-9 C 76,-8 74,-7 72,-6 C 78,0 88,6 96,10 C 94,14 86,14 80,12 C 70,10 62,6 58,2 C 48,6 32,14 10,18 C 0,18 -10,10 -14,-4 Z" fill="url(#gHead)"/>
+      <g clip-path="url(#cHead)">
+        <ellipse cx="38" cy="6" rx="26" ry="11" fill="#f3d9a2" opacity="0.5"/>
+        <ellipse cx="90" cy="-24" rx="15" ry="9" fill="#f2d29a" opacity="0.35"/>
+        <ellipse cx="70" cy="-24" rx="12" ry="7" fill="#a86f2a" opacity="0.18"/>
+        <g fill="none" stroke="#a26a26" stroke-width="1.8" stroke-linecap="round" opacity="0.14">
+          <path d="M 30,-30 C 38,-24 44,-16 44,-6"/>
+          <path d="M 10,-14 C 18,-8 26,0 28,8"/>
+          <path d="M 20,-26 C 30,-20 36,-10 38,0"/>
+        </g>
+        <path d="M 50,-52 C 56,-50 62,-46 66,-42" fill="none" stroke="#f8e6bc" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+      </g>
+    </g>
+    <g id="mouth-open">
+      <path d="M 72,-6 C 78,-8 90,-10 100,-14 C 98,-6 92,4 80,8 C 76,6 73,0 72,-6 Z" fill="#4a1a1c"/>
+      <path d="M 74,-2 C 80,-4 88,-2 92,4 C 90,8 84,10 78,8 C 74,6 72,2 74,-2 Z" fill="#e0707f"/>
+      <ellipse cx="84" cy="2" rx="4" ry="2" fill="#f5a0ab" opacity="0.6"/>
+      <path d="M 96,-13 L 97,-8 L 99,-13 Z" fill="#f4f0e6"/>
+      <path d="M 91,7 L 92,3 L 94,8 Z" fill="#f4f0e6"/>
+    </g>
+    <g id="mouth-line">
+      <path d="M 101,-16 C 96,-12 90,-10 82,-9 C 79,-9 78,-11 79,-13" fill="none" stroke="#6b3f16" stroke-width="1.1" stroke-linecap="round" opacity="0.8"/>
+    </g>
+    <g id="face">
+      <path d="M 63,-46 C 69,-50 78,-49 83,-45" fill="none" stroke="#b27a34" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+      <path d="M 65,-38 C 68,-44 77,-44 80,-38 C 77,-33 68,-33 65,-38 Z" fill="#e8dcc4"/>
+      <circle cx="73" cy="-38.5" r="3.8" fill="#5a3410"/>
+      <circle cx="73.5" cy="-38.5" r="2.2" fill="#0d0806"/>
+      <circle cx="71.5" cy="-40.5" r="1.3" fill="#ffffff" opacity="0.9"/>
+      <circle cx="75.2" cy="-36.6" r="0.6" fill="#ffffff" opacity="0.6"/>
+      <path d="M 65,-38 C 68,-44 77,-44 80,-38 C 77,-33 68,-33 65,-38 Z" fill="none" stroke="#3b2410" stroke-width="0.9"/>
+      <path d="M 65,-38 C 68,-44 77,-44 80,-38" fill="none" stroke="#2a190b" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M 98,-30 C 104,-31 109,-27 108,-21 C 107,-16 102,-14 98,-16 C 96,-20 96,-26 98,-30 Z" fill="#1a1410"/>
+      <ellipse cx="101" cy="-27" rx="3" ry="1.6" fill="#ffffff" opacity="0.35"/>
+      <path d="M 105,-24 C 106,-22 105,-20 103,-20" fill="none" stroke="#000000" stroke-width="1" opacity="0.5"/>
+    </g>
+    <!-- ear, hanging from its attachment on the skull -->
+    <g id="ear">
+      <path d="M 0,0 C -10,-2 -18,8 -18,22 C -18,34 -12,45 -3,47 C 7,49 15,38 15,26 C 15,12 11,2 0,0 Z" fill="url(#gEar)"/>
+      <path d="M 0,0 C -10,-2 -18,8 -18,22 C -18,34 -12,45 -3,47 C 7,49 15,38 15,26 C 15,12 11,2 0,0 Z" fill="none" stroke="#6e3f10" stroke-width="1.2" opacity="0.45"/>
+      <path d="M 2,3 C 8,6 12,14 12,26 C 12,34 9,40 4,44" fill="none" stroke="#5e3410" stroke-width="2.5" stroke-linecap="round" opacity="0.28"/>
+      <path d="M -4,2 C -12,6 -16,14 -16,24" fill="none" stroke="#d99a4d" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+      <g fill="none" stroke="#7d4a15" stroke-width="1" stroke-linecap="round" opacity="0.3">
+        <path d="M -8,18 C -8,28 -6,36 -2,42"/>
+        <path d="M 6,12 C 8,22 8,32 6,40"/>
+      </g>
+    </g>
+    <!-- foreleg, pivot at the shoulder, paw bottom at y=92 -->
+    <g id="foreleg">
+      <path d="M -8,30 L -14,36 L -9,42 L -15,50 L -9,56 L -14,64 L -8,70 Z" fill="#f5dfa9"/>
+      <path d="M -10,-6 C -14,10 -13,30 -8,48 C -7,62 -8,72 -8,80 C -8,88 -2,92 8,92 C 16,92 20,88 20,84 C 20,78 14,76 10,72 C 8,60 8,40 12,20 C 14,8 12,-4 8,-8 C 4,-10 -6,-10 -10,-6 Z" fill="url(#gLeg)"/>
+      <ellipse cx="6" cy="86" rx="11" ry="6" fill="#f3d9a0" opacity="0.5"/>
+      <path d="M -8,-2 C -4,8 -2,18 -4,28" fill="none" stroke="#a86f2a" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+      <g fill="none" stroke="#a27a3a" stroke-width="1" stroke-linecap="round" opacity="0.5">
+        <path d="M 2,92 L 3,86"/>
+        <path d="M 8,92 L 8,85"/>
+        <path d="M 14,91 L 13,86"/>
+      </g>
+    </g>
+    <!-- hind leg, pivot at the hip, paw bottom at y=92 -->
+    <g id="hindleg">
+      <path d="M -22,16 L -29,22 L -23,28 L -30,36 L -23,42 L -28,50 L -20,56 Z" fill="#f5dfa9"/>
+      <path d="M -14,-6 C -24,14 -26,36 -18,50 C -20,58 -22,64 -20,68 C -16,74 -12,82 -10,86 C -10,90 -6,92 2,92 C 12,92 18,90 18,86 C 18,80 12,76 8,72 C 2,64 0,56 6,46 C 14,36 18,20 12,6 C 8,-4 -6,-8 -14,-6 Z" fill="url(#gHind)"/>
+      <ellipse cx="4" cy="86" rx="11" ry="6" fill="#f3d9a0" opacity="0.5"/>
+      <path d="M -6,4 C -12,16 -14,30 -8,44" fill="none" stroke="#a86f2a" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+      <path d="M 6,10 C 2,20 0,32 4,44" fill="none" stroke="#f8e6bc" stroke-width="1.4" stroke-linecap="round" opacity="0.4"/>
+      <g fill="none" stroke="#a27a3a" stroke-width="1" stroke-linecap="round" opacity="0.5">
+        <path d="M 0,92 L 0,86"/>
+        <path d="M 6,92 L 6,85"/>
+        <path d="M 12,91 L 12,86"/>
+      </g>
+    </g>
+    <!-- tail, pivot at the croup -->
+    <g id="tail">
+      <path d="M -62,0 L -60,10 L -52,6 L -50,18 L -42,12 L -38,24 L -30,16 L -26,26 L -16,18 L -12,26 L -4,14 L 0,6 Z" fill="#f5dfa9"/>
+      <path d="M 0,-6 C -20,-14 -40,-16 -58,-12 C -66,-10 -70,-4 -66,2 C -60,8 -46,14 -30,16 C -18,18 -8,14 0,6 Z" fill="url(#gTail)"/>
+      <path d="M -10,-8 C -25,-12 -40,-12 -55,-8" fill="none" stroke="#a86f2a" stroke-width="1.8" stroke-linecap="round" opacity="0.18"/>
+      <path d="M -8,-2 C -22,-6 -38,-6 -52,-2" fill="none" stroke="#f8e6bc" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+    </g>
+
+    <!--
+      Poses. Draw order: far legs, tail, neck and head, body, near legs, so the
+      body hides the neck root and the head can hinge at the withers.
+    -->
+    <g id="dog-walk">
+      <ellipse cx="4" cy="0" rx="112" ry="8" fill="#000000" opacity="0.2" filter="url(#soft)"/>
+      <g class="bob-walk">
+        <g filter="url(#dim)">
+          <g transform="translate(-44,-94)"><g class="leg-fh"><use href="#hindleg" filter="url(#fur)"/></g></g>
+          <g transform="translate(40,-94)"><g class="leg-ff"><use href="#foreleg" filter="url(#fur)"/></g></g>
+        </g>
+        <g transform="translate(-60,-92)"><g class="tail-walk"><use href="#tail" filter="url(#fur)"/></g></g>
+        <g transform="translate(36,-100)"><g class="head-walk">
+          <use href="#headfur" filter="url(#fur)"/>
+          <g transform="translate(44,-46)"><g class="ear-walk"><use href="#ear" filter="url(#fur)"/></g></g>
+          <use href="#face"/>
+          <use href="#mouth-line"/>
+        </g></g>
+        <use href="#body" filter="url(#fur)"/>
+        <g transform="translate(-40,-92)"><g class="leg-nh"><use href="#hindleg" filter="url(#fur)"/></g></g>
+        <g transform="translate(44,-92)"><g class="leg-nf"><use href="#foreleg" filter="url(#fur)"/></g></g>
+      </g>
+    </g>
+
+    <g id="dog-sniff">
+      <ellipse cx="4" cy="0" rx="112" ry="8" fill="#000000" opacity="0.2" filter="url(#soft)"/>
+      <g filter="url(#dim)">
+        <g transform="translate(-44,-94) rotate(3)"><use href="#hindleg" filter="url(#fur)"/></g>
+        <g transform="translate(40,-94) rotate(4)"><use href="#foreleg" filter="url(#fur)"/></g>
+      </g>
+      <g transform="translate(-60,-92)"><g class="tail-sniff"><use href="#tail" filter="url(#fur)"/></g></g>
+      <g transform="translate(36,-100)"><g class="head-sniff"><g transform="rotate(62)">
+        <use href="#headfur" filter="url(#fur)"/>
+        <g transform="translate(44,-46) rotate(-50)"><use href="#ear" filter="url(#fur)"/></g>
+        <use href="#face"/>
+        <use href="#mouth-line"/>
+      </g></g></g>
+      <use href="#body" filter="url(#fur)"/>
+      <g transform="translate(-40,-92) rotate(-3)"><use href="#hindleg" filter="url(#fur)"/></g>
+      <g transform="translate(44,-92) rotate(-5)"><use href="#foreleg" filter="url(#fur)"/></g>
+    </g>
+
+    <g id="dog-bark">
+      <ellipse cx="4" cy="0" rx="112" ry="8" fill="#000000" opacity="0.2" filter="url(#soft)"/>
+      <g filter="url(#dim)">
+        <g transform="translate(-44,-94)"><use href="#hindleg" filter="url(#fur)"/></g>
+        <g transform="translate(40,-94)"><use href="#foreleg" filter="url(#fur)"/></g>
+      </g>
+      <g transform="translate(-60,-92)"><g class="tail-bark"><use href="#tail" filter="url(#fur)"/></g></g>
+      <g transform="translate(36,-100)"><g class="head-bark"><g transform="rotate(-12)">
+        <use href="#headfur-open" filter="url(#fur)"/>
+        <g transform="translate(44,-46) rotate(4)"><use href="#ear" filter="url(#fur)"/></g>
+        <use href="#mouth-open"/>
+        <use href="#face"/>
+      </g></g></g>
+      <use href="#body" filter="url(#fur)"/>
+      <g transform="translate(-40,-92)"><use href="#hindleg" filter="url(#fur)"/></g>
+      <g transform="translate(44,-92)"><use href="#foreleg" filter="url(#fur)"/></g>
+    </g>
+  </defs>
+
   <rect width="860" height="240" fill="#ffffff"/>
+  <rect y="186" width="860" height="54" fill="url(#gGround)"/>
+  <line x1="0" y1="190" x2="860" y2="190" stroke="#cfc7b6" stroke-width="2"/>
 
-  <line x1="0" y1="190" x2="860" y2="190" class="ground" stroke="#6e7681" stroke-width="3"/>
-
-  <g class="grass">
-    <path d="M40 190 L40 176 M40 184 L33 174 M40 184 L47 174" stroke="#56d364" stroke-width="2" fill="none"/>
-    <path d="M160 190 L160 176 M160 184 L153 174 M160 184 L167 174" stroke="#56d364" stroke-width="2" fill="none"/>
-    <path d="M300 190 L300 176 M300 184 L293 174 M300 184 L307 174" stroke="#56d364" stroke-width="2" fill="none"/>
-    <path d="M540 190 L540 176 M540 184 L533 174 M540 184 L547 174" stroke="#56d364" stroke-width="2" fill="none"/>
-    <path d="M820 190 L820 176 M820 184 L813 174 M820 184 L827 174" stroke="#56d364" stroke-width="2" fill="none"/>
+  <g fill="none" stroke="#6fae4c" stroke-width="2" stroke-linecap="round">
+    <path d="M40 190 L40 176 M40 184 L33 174 M40 184 L47 174"/>
+    <path d="M160 190 L160 176 M160 184 L153 174 M160 184 L167 174"/>
+    <path d="M300 190 L300 176 M300 184 L293 174 M300 184 L307 174"/>
+    <path d="M540 190 L540 176 M540 184 L533 174 M540 184 L547 174"/>
+    <path d="M835 190 L835 176 M835 184 L828 174 M835 184 L842 174"/>
   </g>
 
-  <g class="house" fill="none" stroke="#b85c38" stroke-width="3" stroke-linejoin="round">
-    <path d="M648 190 L648 150 L688 124 L728 150 L728 190 Z"/>
-    <path d="M676 190 L676 162 L700 162 L700 190"/>
+  <g stroke-linejoin="round">
+    <path d="M738 190 L738 150 L770 124 L802 150 L802 190 Z" fill="#e8dfd0" stroke="#8b7b66" stroke-width="2"/>
+    <path d="M732 153 L770 120 L808 153" fill="none" stroke="#a3583a" stroke-width="4"/>
+    <rect x="760" y="162" width="20" height="28" fill="#8b5a3a"/>
+    <rect x="744" y="158" width="10" height="10" fill="#cfe3ee" stroke="#8b7b66" stroke-width="1"/>
+    <rect x="786" y="158" width="10" height="10" fill="#cfe3ee" stroke="#8b7b66" stroke-width="1"/>
   </g>
-
-  <!--
-    DOG_RIGHT base art (variant B), origin shifted so the dog's bounding box
-    sits with feet on the ground line at y=190 and left foot near x=60.
-    Original variant B spanned x 24..200, feet at y=120, head up.
-    Here the standing dog is drawn directly in scene coordinates.
-  -->
 
   <!-- WALK RIGHT -->
   <g class="wr">
-    <g class="dog">
-      <g class="ta"><path d="M84 150 Q62 144 58 120 Q56 102 74 108 Q68 120 70 128 Q74 136 86 140 Z"/></g>
-      <g class="tb"><path d="M84 150 Q60 150 50 130 Q44 116 62 112 Q60 124 66 132 Q72 140 86 144 Z"/></g>
-      <ellipse cx="132" cy="148" rx="56" ry="30"/>
-      <g class="la">
-        <rect x="94"  y="162" width="14" height="28" rx="6"/>
-        <rect x="152" y="162" width="14" height="28" rx="6"/>
-      </g>
-      <g class="lb">
-        <rect x="118" y="162" width="14" height="28" rx="6"/>
-        <rect x="176" y="162" width="14" height="28" rx="6"/>
-      </g>
-      <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
-      <circle cx="200" cy="120" r="24"/>
-      <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
-      <path class="ear" d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
-    </g>
-    <circle cx="232" cy="132" r="4" class="nose"/>
-    <circle cx="210" cy="116" r="2.6" class="eye"/>
+    <use href="#dog-walk" transform="translate(150,190) scale(0.9)"/>
   </g>
 
-  <!-- SNIFF RIGHT (stationary at right side, head lowered to the ground) -->
+  <!-- SNIFF RIGHT -->
   <g class="pr">
-    <g class="dog bob">
-      <path d="M524 150 Q502 144 498 120 Q496 102 514 108 Q508 120 510 128 Q514 136 526 140 Z"/>
-      <ellipse cx="572" cy="150" rx="56" ry="28"/>
-      <rect x="536" y="164" width="14" height="26" rx="6"/>
-      <rect x="560" y="166" width="14" height="24" rx="6"/>
-      <rect x="594" y="166" width="14" height="24" rx="6"/>
-      <rect x="612" y="164" width="14" height="26" rx="6"/>
-      <path d="M616 150 Q634 152 646 168 L660 178 Q648 188 628 184 Q616 170 616 150 Z"/>
-      <circle cx="664" cy="180" r="20"/>
-      <path d="M678 188 Q694 190 692 198 Q688 204 674 198 Q672 192 678 188 Z"/>
-      <path class="ear" d="M628 132 Q616 130 616 150 Q616 168 624 180 Q630 188 640 182 Q636 168 638 152 Q640 138 636 132 Q632 128 628 132 Z"/>
-      <circle cx="682" cy="186" r="4" class="nose"/>
-      <circle cx="660" cy="172" r="2.6" class="eye"/>
-    </g>
+    <use href="#dog-sniff" transform="translate(590,190) scale(0.9)"/>
   </g>
 
-  <!-- BARK RIGHT (stationary at right side, head UP; walk art frozen at end of walk) -->
+  <!-- BARK RIGHT -->
   <g class="br">
-    <g transform="translate(440,0)">
-      <g class="dog">
-        <g class="ta"><path d="M84 150 Q62 144 58 120 Q56 102 74 108 Q68 120 70 128 Q74 136 86 140 Z"/></g>
-        <g class="tb"><path d="M84 150 Q60 150 50 130 Q44 116 62 112 Q60 124 66 132 Q72 140 86 144 Z"/></g>
-        <ellipse cx="132" cy="148" rx="56" ry="30"/>
-        <rect x="94"  y="162" width="14" height="28" rx="6"/>
-        <rect x="118" y="162" width="14" height="28" rx="6"/>
-        <rect x="152" y="162" width="14" height="28" rx="6"/>
-        <rect x="176" y="162" width="14" height="28" rx="6"/>
-        <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
-        <circle cx="200" cy="120" r="24"/>
-        <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
-        <path class="ear" d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
-      </g>
-      <circle cx="232" cy="132" r="4" class="nose"/>
-      <circle cx="210" cy="116" r="2.6" class="eye"/>
-    </g>
+    <use href="#dog-bark" transform="translate(590,190) scale(0.9)"/>
     <g class="bkr">
-      <text x="700" y="120" class="bark">woof!</text>
+      <text x="700" y="44" class="bark">woof!</text>
     </g>
   </g>
 
-  <!-- WALK LEFT (mirror of walk-right via scaleX) -->
+  <!-- WALK LEFT (mirrored) -->
   <g class="wl">
-    <g transform="translate(264,0) scale(-1,1)">
-      <g class="dog">
-        <g class="ta"><path d="M84 150 Q62 144 58 120 Q56 102 74 108 Q68 120 70 128 Q74 136 86 140 Z"/></g>
-        <g class="tb"><path d="M84 150 Q60 150 50 130 Q44 116 62 112 Q60 124 66 132 Q72 140 86 144 Z"/></g>
-        <ellipse cx="132" cy="148" rx="56" ry="30"/>
-        <g class="la">
-          <rect x="94"  y="162" width="14" height="28" rx="6"/>
-          <rect x="152" y="162" width="14" height="28" rx="6"/>
-        </g>
-        <g class="lb">
-          <rect x="118" y="162" width="14" height="28" rx="6"/>
-          <rect x="176" y="162" width="14" height="28" rx="6"/>
-        </g>
-        <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
-        <circle cx="200" cy="120" r="24"/>
-        <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
-        <path class="ear" d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
-      </g>
-      <circle cx="232" cy="132" r="4" class="nose"/>
-      <circle cx="210" cy="116" r="2.6" class="eye"/>
-    </g>
+    <use href="#dog-walk" transform="translate(150,190) scale(-0.9,0.9)"/>
   </g>
 
-  <!-- SNIFF LEFT (stationary at left side, head lowered to the ground) -->
+  <!-- SNIFF LEFT -->
   <g class="pl">
-    <g transform="translate(732,0) scale(-1,1)">
-      <g class="dog bob">
-        <path d="M524 150 Q502 144 498 120 Q496 102 514 108 Q508 120 510 128 Q514 136 526 140 Z"/>
-        <ellipse cx="572" cy="150" rx="56" ry="28"/>
-        <rect x="536" y="164" width="14" height="26" rx="6"/>
-        <rect x="560" y="166" width="14" height="24" rx="6"/>
-        <rect x="594" y="166" width="14" height="24" rx="6"/>
-        <rect x="612" y="164" width="14" height="26" rx="6"/>
-        <path d="M616 150 Q634 152 646 168 L660 178 Q648 188 628 184 Q616 170 616 150 Z"/>
-        <circle cx="664" cy="180" r="20"/>
-        <path d="M678 188 Q694 190 692 198 Q688 204 674 198 Q672 192 678 188 Z"/>
-        <path class="ear" d="M628 132 Q616 130 616 150 Q616 168 624 180 Q630 188 640 182 Q636 168 638 152 Q640 138 636 132 Q632 128 628 132 Z"/>
-        <circle cx="682" cy="186" r="4" class="nose"/>
-        <circle cx="660" cy="172" r="2.6" class="eye"/>
-      </g>
-    </g>
+    <use href="#dog-sniff" transform="translate(150,190) scale(-0.9,0.9)"/>
   </g>
 
-  <!-- BARK LEFT (stationary at left side, head UP; walk-left art frozen at end of walk) -->
+  <!-- BARK LEFT -->
   <g class="bl">
-    <g transform="translate(264,0) scale(-1,1)">
-      <g class="dog">
-        <g class="ta"><path d="M84 150 Q62 144 58 120 Q56 102 74 108 Q68 120 70 128 Q74 136 86 140 Z"/></g>
-        <g class="tb"><path d="M84 150 Q60 150 50 130 Q44 116 62 112 Q60 124 66 132 Q72 140 86 144 Z"/></g>
-        <ellipse cx="132" cy="148" rx="56" ry="30"/>
-        <rect x="94"  y="162" width="14" height="28" rx="6"/>
-        <rect x="118" y="162" width="14" height="28" rx="6"/>
-        <rect x="152" y="162" width="14" height="28" rx="6"/>
-        <rect x="176" y="162" width="14" height="28" rx="6"/>
-        <path d="M172 140 Q184 134 186 122 L202 126 Q200 148 178 158 Z"/>
-        <circle cx="200" cy="120" r="24"/>
-        <path d="M216 122 Q234 120 234 132 Q234 144 216 140 Q210 131 216 122 Z"/>
-        <path class="ear" d="M192 102 Q178 100 176 118 Q172 138 168 158 Q166 172 180 170 Q190 160 190 140 Q190 120 196 110 Q198 104 192 102 Z"/>
-      </g>
-      <circle cx="232" cy="132" r="4" class="nose"/>
-      <circle cx="210" cy="116" r="2.6" class="eye"/>
-    </g>
+    <use href="#dog-bark" transform="translate(150,190) scale(-0.9,0.9)"/>
     <g class="bkl">
-      <text x="92" y="104" class="bark">woof!</text>
+      <text x="34" y="44" class="bark">woof!</text>
     </g>
   </g>
 </svg>
